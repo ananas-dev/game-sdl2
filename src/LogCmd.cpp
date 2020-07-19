@@ -1,4 +1,4 @@
-#include "../include/LogCmd.hpp"
+#include "LogCmd.hpp"
 #define LOG(prefix, message) std::cout << prefix << message << std::endl;
 
 namespace logcmd {

@@ -4,14 +4,6 @@ project(Game VERSION 0.0.1
                   DESCRIPTION "Game project using c++ and SDL2"
                   LANGUAGES CXX)
 
-set(PROJECT_SOURCE_DIR "./src/")
-set(GCC_COVERAGE_COMPILE_FLAGS "-lSDL2")
-
-add_library(LogCmd STATIC "./src/LogCmd.cpp" "./include/LogCmd.hpp")
-add_library(Game STATIC "./src/Game.cpp" "./include/Game.hpp")
-
-add_executable(Game )
-
-add_definitions(${GCC_COVERAGE_COMPILE_FLAGS})
-
-target_include_directories(GameExe PRIVATE ${Game_INCLUDE_DIRS})
+add_subdirectory(src)
+add_subdirectory(libs/SDL2)
+add_subdirectory(game)
