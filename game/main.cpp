@@ -1,6 +1,7 @@
 #include <SDL2/SDL.h>
 #include <iostream>
 #include "../src/Game.hpp"
+#include "../src/LogCmd.hpp"
 
 Game *game = nullptr;
 

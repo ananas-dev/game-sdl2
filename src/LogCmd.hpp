@@ -1,8 +1,6 @@
 #pragma once
 #include <iostream>
 
-// Logger
-
 namespace logcmd
 {
     void info(const char* message);
