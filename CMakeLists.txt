@@ -13,6 +13,7 @@ file(
   GLOB SRCS
   "${PROJECT_SOURCE_DIR}/include/*"
   "${PROJECT_SOURCE_DIR}/src/*"
+  "${PROJECT_SOURCE_DIR}/game/*"
 )
 
 add_executable(Game ${SRCS})
