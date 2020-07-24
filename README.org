@@ -1,6 +1,5 @@
 #+TITLE: Game SDL2
 #+AUTHOR: Lucien Fiorini
-#+PROPERTY: header-args :tangle CMakeLists.txt
 
 * Table of content :toc:
 - [[#project][Project]]
@@ -9,20 +8,24 @@
 - [[#engine][Engine]]
   - [[#library][Library]]
 - [[#game][Game]]
+  - [[#structure-1][Structure]]
 
 * Project
 ** Structure
-| src  | source file of the game engine |
-| game | source files of the game       |
-| libs | external libraries             |
+| src     | source files       |
+| include | include files      |
+| game    | implementation     |
+| libs    | external libraries |
 
 ** Build system
-The project is using CMAKE to generate build files
-#+INCLUDE: "./CMakeLists.txt" src cmake
-
+The project uses CMAKE to generate build files, the configuration can be found in [["./CMakeLists.txt"][CMakeLists.txt]].
 * Engine
 ** Library
-
-
+There are 2 libraries used by the game:
+    - [[https://www.libsdl.org/][SDL2]]
+    - [[https://www.libsdl.org/projects/SDL_image/][SDL_image]]
 
 * Game
+** Structure
+The game folder is where the implementation is done,
+for the moment it contains only [[./game/main.cpp][main.cpp]] but it will become more complex later.
