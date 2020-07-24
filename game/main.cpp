@@ -9,17 +9,22 @@ int main(int argc, char *argv[]) {
 
     game = new Game();
 
-    game->init("Game", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 800, 600, false);
+    game->Init("Game", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 800, 640, false);
+    game->SetFPS(60);
 
-    while (game->running()) {
+    while (game->Running())
+    {
+        game->StartFrame();
 
-    game->handleEvent();
-    game->update();
-    game->render();
+        game->HandleEvent();
+        game->Update();
+        game->Render();
 
+        game->EndFrame();
     }
 
-    game->clean();
+    game->Clean();
+    logcmd::warn("Execution has stopped, cleaning...");
 
     return 0;
 }

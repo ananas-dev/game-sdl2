@@ -1,29 +1,35 @@
-#ifndef __GAME_H_
-#define __GAME_H_
+#pragma once
 #include <SDL2/SDL.h>
+#include <SDL2/SDL_image.h>
 #include <iostream>
 #include "LogCmd.hpp"
 
-class Game {
+class Game
+{
+        public:
+                Game();
+                ~Game();
 
-public:
-    Game();
-    ~Game();
+                void Init(const char *title, int xpos, int ypos, int width, int height,
+                          bool fullscreen);
 
-    void init(const char *title, int xpos, int ypos, int width, int height,
-              bool fullscreen);
+                void SetFPS(const int FPS);
+                void StartFrame();
+                void EndFrame();
 
-    void handleEvent();
-    void update();
-    void render();
-    void clean();
+                void HandleEvent();
+                void Update();
+                void Render();
+                void Clean();
+                bool Running() { return isRunning_; }
 
-    bool running() { return isRunning; }
+                static SDL_Renderer *renderer;
 
-private:
-    bool isRunning;
-    SDL_Window *window;
-    SDL_Renderer *renderer;
+        private:
+                bool isRunning_;
+                SDL_Window *window_;
+                int frameDelay_;
+                int frameTime_;
+                Uint32 frameStart_;
+                int frameCount_;
 };
-
-#endif // __GAME_H_

@@ -1,21 +1,25 @@
 #include "LogCmd.hpp"
-#define LOG(prefix, message) std::cout << prefix << message << std::endl;
 
 namespace logcmd {
 
-    void info(const char* message)
+    void log(std::string prefix, std::string something)
     {
-        LOG("[INFO]: ", message);
-    };
+        std::cout << prefix << something << std::endl;
+    }
 
-    void warn(const char* message)
+    void info(std::string something)
     {
-        LOG("[WARNING]: ", message);
-    };
+        log("[INFO]: ", something);
+    }
 
-    void err(const char* message)
+    void warn(std::string something)
     {
-        LOG("[ERROR]: ", message);
-    };
+        log("[WARNING]: ", something);
+    }
+
+    void err(std::string something)
+    {
+        log("[ERROR]: ", something);
+    }
 
 }

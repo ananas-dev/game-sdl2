@@ -3,7 +3,8 @@
 
 namespace logcmd
 {
-    void info(const char* message);
-    void warn(const char* message);
-    void err(const char* message);
+    void log(std::string prefix, std::string content);
+    void info(std::string content);
+    void warn(std::string content);
+    void err(std::string content);
 }
