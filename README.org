@@ -18,17 +18,7 @@
 
 ** Build system
 The project is using CMAKE to generate build files
-#+BEGIN_SRC cmake
-cmake_minimum_required(VERSION 4.0)
-
-project(Game VERSION 0.0.1
-                  DESCRIPTION "Game project using c++ and SDL2"
-                  LANGUAGES CXX)
-
-add_subdirectory(src)
-add_subdirectory(libs/SDL2)
-add_subdirectory(game)
-#+END_SRC
+#+INCLUDE: "./CMakeLists.txt" src cmake
 
 * Engine
 ** Library

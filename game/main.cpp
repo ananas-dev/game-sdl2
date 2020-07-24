@@ -5,7 +5,8 @@
 
 Game *game = nullptr;
 
-int main(int argc, char *argv[]) {
+int main(int argc, char *argv[])
+{
 
     game = new Game();
 
