@@ -2,11 +2,16 @@
 #include <TextureManager.hpp>
 #include <GameObject.hpp>
 #include <Map.hpp>
+#include <ECS.hpp>
+#include <Components.hpp>
 
 GameObject* player;
 Map* map;
 
 SDL_Renderer* Game::renderer = nullptr;
+
+Manager manager;
+auto& newPlayer(manager.AddEntity());
 
 Game::Game() {}
 Game::~Game() {}
@@ -41,9 +46,12 @@ void Game::Init(const char *title, int xpos, int ypos, int width, int height, bo
 
     player = new GameObject("assets/adventurer/adventurer-idle-00.png", 0, 0);
     map = new Map();
+
+    newPlayer.AddComponent<PositionComponent>();
+    newPlayer.GetComponent<PositionComponent>().SetPos(500, 500);
 }
 
-// Frame related stuff
+/* Frame related stuff */
 
 void Game::SetFps(const int FPS)
 {
@@ -96,6 +104,9 @@ void Game::HandleEvent()
 void Game::Update()
 {
     player->Update();
+    manager.Update();
+    std::cout << newPlayer.GetComponent<PositionComponent>().X() << ", " <<
+        newPlayer.GetComponent<PositionComponent>().Y() << std::endl;
 }
 
 void Game::Render()
