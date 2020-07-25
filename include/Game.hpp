@@ -13,7 +13,7 @@ class Game
                 void Init(const char *title, int xpos, int ypos, int width, int height,
                           bool fullscreen);
 
-                void SetFPS(const int FPS);
+                void SetFps(const int FPS);
                 void StartFrame();
                 void EndFrame();
 

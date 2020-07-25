@@ -45,7 +45,7 @@ void Game::Init(const char *title, int xpos, int ypos, int width, int height, bo
 
 // Frame related stuff
 
-void Game::SetFPS(const int FPS)
+void Game::SetFps(const int FPS)
 {
     frameDelay_ = 1000 / FPS;
 }

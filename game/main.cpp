@@ -11,7 +11,7 @@ int main(int argc, char *argv[])
     game = new Game();
 
     game->Init("Game", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 800, 640, false);
-    game->SetFPS(60);
+    game->SetFps(60);
 
     while (game->Running())
     {
