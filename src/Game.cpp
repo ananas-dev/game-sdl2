@@ -1,17 +1,15 @@
 #include <Game.hpp>
+#include <LogCmd.hpp>
 #include <TextureManager.hpp>
-#include <GameObject.hpp>
+#include <ECS/Components.hpp>
 #include <Map.hpp>
-#include <ECS.hpp>
-#include <Components.hpp>
 
-GameObject* player;
 Map* map;
+Manager manager;
 
 SDL_Renderer* Game::renderer = nullptr;
 
-Manager manager;
-auto& newPlayer(manager.AddEntity());
+auto& player(manager.AddEntity());
 
 Game::Game() {}
 Game::~Game() {}
@@ -44,11 +42,15 @@ void Game::Init(const char *title, int xpos, int ypos, int width, int height, bo
         isRunning_ = false;
     }
 
-    player = new GameObject("assets/adventurer/adventurer-idle-00.png", 0, 0);
     map = new Map();
+    logcmd::info("Map Loaded !");
 
-    newPlayer.AddComponent<PositionComponent>();
-    newPlayer.GetComponent<PositionComponent>().SetPos(500, 500);
+    /*  ECS implementation */
+
+    player.AddComponent<PositionComponent>();
+    logcmd::info("Player position set !");
+    player.AddComponent<SpriteComponent>("assets/adventurer/adventurer-idle-00.png");
+    logcmd::info("Player textures loaded !");
 }
 
 /* Frame related stuff */
@@ -103,18 +105,22 @@ void Game::HandleEvent()
 
 void Game::Update()
 {
-    player->Update();
+    manager.Refresh();
     manager.Update();
-    std::cout << newPlayer.GetComponent<PositionComponent>().X() << ", " <<
-        newPlayer.GetComponent<PositionComponent>().Y() << std::endl;
+
+    if (player.GetComponent<PositionComponent>().X() > 100)
+    {
+        player.GetComponent<SpriteComponent>().SetTexture("assets/square.png");
+    }
 }
 
 void Game::Render()
 {
     SDL_RenderClear(renderer);
-    // Render stuff there
+
     map->DrawMap();
-    player->Render();
+    manager.Draw();
+
     SDL_RenderPresent(renderer);
 }
 
