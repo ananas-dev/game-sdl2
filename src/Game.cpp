@@ -1,8 +1,9 @@
 #include <Game.hpp>
-#include <LogCmd.hpp>
-#include <TextureManager.hpp>
 #include <ECS/Components.hpp>
+#include <LogCmd.hpp>
 #include <Map.hpp>
+#include <Vector2D.hpp>
+#include <TextureManager.hpp>
 
 Map* map;
 Manager manager;
@@ -47,7 +48,7 @@ void Game::Init(const char *title, int xpos, int ypos, int width, int height, bo
 
     /*  ECS implementation */
 
-    player.AddComponent<PositionComponent>();
+    player.AddComponent<TransformComponent>();
     logcmd::info("Player position set !");
     player.AddComponent<SpriteComponent>("assets/adventurer/adventurer-idle-00.png");
     logcmd::info("Player textures loaded !");
@@ -107,8 +108,8 @@ void Game::Update()
 {
     manager.Refresh();
     manager.Update();
-
-    if (player.GetComponent<PositionComponent>().X() > 100)
+    player.GetComponent<TransformComponent>().position.Add(Vector2D(5, 5));
+    if (player.GetComponent<TransformComponent>().position.x > 100)
     {
         player.GetComponent<SpriteComponent>().SetTexture("assets/square.png");
     }

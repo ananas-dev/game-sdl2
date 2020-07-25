@@ -1,4 +1,5 @@
 #pragma once
+#include <iostream>
 
 class Vector2D
 {
@@ -24,4 +25,5 @@ class Vector2D
         Vector2D& operator*=(const Vector2D& vector);
         Vector2D& operator/=(const Vector2D& vector);
 
+        friend std::ostream& operator<<(std::ostream& stream, const Vector2D vector);
 };

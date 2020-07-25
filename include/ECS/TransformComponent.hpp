@@ -1,46 +1,26 @@
 #pragma once
 #include <ECS/Components.hpp>
+#include <Vector2D.hpp>
 
-class PositionComponent : public Component
+class TransformComponent : public Component
 {
-    private:
-        int xpos_;
-        int ypos_;
-
     public:
-        PositionComponent()
+
+        Vector2D position;
+
+        TransformComponent()
         {
-            xpos_ = 0;
-            ypos_ = 0;
+            position.x = 0;
+            position.y = 0;
         }
 
-        PositionComponent(int x, int y)
+        TransformComponent(int x, int y)
         {
-            xpos_ = x;
-            ypos_ = y;
+            position.x = x;
+            position.y = y;
         }
 
         void Update() override
         {
-            xpos_++;
-            ypos_++;
-        }
-
-        int X()
-        {
-            return xpos_;
-        }
-        void X(int x)
-        {
-            xpos_ = x;
-        }
-
-        int Y()
-        {
-            return ypos_;
-        }
-        void Y(int y)
-        {
-            ypos_ = y;
         }
 };
