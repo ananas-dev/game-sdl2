@@ -38,10 +38,10 @@ class SpriteComponent : public Component
 
         void Update() override
         {
-            destRect_.x = (int)transform_->position.x;
-            destRect_.y = (int)transform_->position.y;
-            destRect_.w = transform_->height = transform_->scale;
-            destRect_.h = transform_->width = transform_->scale;
+            destRect_.x = static_cast<int>(transform_->position.x);
+            destRect_.y = static_cast<int>(transform_->position.y);
+            destRect_.w = transform_->width * transform_->scale;
+            destRect_.h = transform_->height * transform_->scale;
         }
 
         void Draw() override

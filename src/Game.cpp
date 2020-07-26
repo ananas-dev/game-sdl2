@@ -47,11 +47,10 @@ void Game::Init(const char *title, int xpos, int ypos, int width, int height, bo
     }
 
     map = new Map();
-    logcmd::info("Map Loaded !");
 
     /*  ECS implementation */
 
-    player.AddComponent<TransformComponent>();
+    player.AddComponent<TransformComponent>(2);
     player.AddComponent<SpriteComponent>("assets/adventurer/adventurer-idle-00.png");
     player.AddComponent<KeyboardController>();
     player.AddComponent<ColliderComponent>("player");
@@ -114,6 +113,13 @@ void Game::Update()
 {
     manager.Refresh();
     manager.Update();
+
+    if (Collision::AABB(player.GetComponent<ColliderComponent>().collider,
+                        wall.GetComponent<ColliderComponent>().collider))
+    {
+        player.GetComponent<TransformComponent>().velocity * -1;
+        logcmd::info("Collision !");
+    }
 }
 
 void Game::Render()

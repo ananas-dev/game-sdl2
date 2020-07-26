@@ -25,5 +25,8 @@ class Vector2D
         Vector2D& operator*=(const Vector2D& vector);
         Vector2D& operator/=(const Vector2D& vector);
 
+        Vector2D& operator*(const int& factor);
+        Vector2D& Zero();
+
         friend std::ostream& operator<<(std::ostream& stream, const Vector2D vector);
 };
