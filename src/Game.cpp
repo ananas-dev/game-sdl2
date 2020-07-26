@@ -6,14 +6,19 @@
 #include <Vector2D.hpp>
 #include <TextureManager.hpp>
 
-Map* map;
 Manager manager;
 
 SDL_Renderer* Game::renderer = nullptr;
 SDL_Event Game::event;
 
-auto &player(manager.AddEntity());
-auto &wall(manager.AddEntity());
+std::vector<ColliderComponent*> Game::colliders;
+
+auto& player(manager.AddEntity());
+auto& wall(manager.AddEntity());
+
+auto& tile0(manager.AddEntity());
+auto& tile1(manager.AddEntity());
+auto& tile2(manager.AddEntity());
 
 Game::Game() {}
 Game::~Game() {}
@@ -46,21 +51,31 @@ void Game::Init(const char *title, int xpos, int ypos, int width, int height, bo
         isRunning_ = false;
     }
 
-    map = new Map();
+    //////////////////////////
+    /// ECS implementation ///
+    //////////////////////////
 
-    /*  ECS implementation */
+    // Tiles
+    tile0.AddComponent<TileComponent>(200, 200, 32, 32, 0);
+    tile1.AddComponent<TileComponent>(250, 200, 32, 32, 1);
+    tile2.AddComponent<TileComponent>(150, 150, 32, 32, 2);
+    tile2.AddComponent<ColliderComponent>("wall");
 
+    // Player
     player.AddComponent<TransformComponent>(2);
     player.AddComponent<SpriteComponent>("assets/adventurer/adventurer-idle-00.png");
     player.AddComponent<KeyboardController>();
     player.AddComponent<ColliderComponent>("player");
 
+    // Wall
     wall.AddComponent<TransformComponent>(300.0f, 300.0f, 300, 20, 1);
     wall.AddComponent<SpriteComponent>("assets/dongeon/wall_mid.png");
     wall.AddComponent<ColliderComponent>("wall");
 }
 
-/* Frame related stuff */
+///////////////////////////
+/// Frame related stuff ///
+///////////////////////////
 
 void Game::SetFps(const int FPS)
 {
@@ -114,21 +129,16 @@ void Game::Update()
     manager.Refresh();
     manager.Update();
 
-    if (Collision::AABB(player.GetComponent<ColliderComponent>().collider,
-                        wall.GetComponent<ColliderComponent>().collider))
+    for (auto cc : colliders)
     {
-        player.GetComponent<TransformComponent>().velocity * -1;
-        logcmd::info("Collision !");
+        Collision::AABB(player.GetComponent<ColliderComponent>(), *cc);
     }
 }
 
 void Game::Render()
 {
     SDL_RenderClear(renderer);
-
-    map->DrawMap();
     manager.Draw();
-
     SDL_RenderPresent(renderer);
 }
 

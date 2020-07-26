@@ -2,6 +2,7 @@
 #include <string>
 #include <ECS/ECS.hpp>
 #include <ECS/TransformComponent.hpp>
+#include <Game.hpp>
 #include <SDL2/SDL.h>
 
 class ColliderComponent : public Component
@@ -24,6 +25,8 @@ class ColliderComponent : public Component
                 entity->AddComponent<TransformComponent>();
             }
             transform = &entity->GetComponent<TransformComponent>();
+
+            Game::colliders.push_back(this);
         }
 
         void Update() override

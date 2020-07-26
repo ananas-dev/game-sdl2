@@ -14,7 +14,7 @@ class SpriteComponent : public Component
 
     public:
         SpriteComponent() = default;
-        SpriteComponent(const char *path)
+        SpriteComponent(std::string path)
         {
             SetTexture(path);
         }
@@ -24,7 +24,7 @@ class SpriteComponent : public Component
             SDL_DestroyTexture(texture_);
         }
 
-        void SetTexture(const char *path)
+        void SetTexture(std::string path)
         {
             texture_ = TextureManager::LoadTexture(path);
         }

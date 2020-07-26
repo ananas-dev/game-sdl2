@@ -5,3 +5,4 @@
 #include <ECS/SpriteComponent.hpp>
 #include <ECS/KeyBoardController.hpp>
 #include <ECS/ColliderComponent.hpp>
+#include <ECS/TileComponent.hpp>
