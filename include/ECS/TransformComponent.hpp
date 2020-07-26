@@ -1,5 +1,5 @@
 #pragma once
-#include <ECS/Components.hpp>
+#include <ECS/ECS.hpp>
 #include <Vector2D.hpp>
 
 class TransformComponent : public Component

@@ -1,5 +1,6 @@
 #pragma once
-#include <ECS/Components.hpp>
+#include <ECS/ECS.hpp>
+#include <ECS/TransformComponent.hpp>
 #include <TextureManager.hpp>
 #include <SDL2/SDL.h>
 

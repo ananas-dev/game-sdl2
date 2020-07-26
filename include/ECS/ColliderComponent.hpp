@@ -1,6 +1,7 @@
 #pragma once
 #include <string>
-#include <ECS/Components.hpp>
+#include <ECS/ECS.hpp>
+#include <ECS/TransformComponent.hpp>
 #include <SDL2/SDL.h>
 
 class ColliderComponent : public Component

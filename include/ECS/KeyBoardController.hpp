@@ -1,7 +1,7 @@
 #pragma once
 #include <Game.hpp>
 #include <ECS/ECS.hpp>
-#include <ECS/Components.hpp>
+#include <ECS/TransformComponent.hpp>
 
 class KeyboardController : public Component
 {
