@@ -18,7 +18,7 @@
 | libs    | external libraries |
 
 ** Build system
-The project uses CMAKE to generate build files, the configuration can be found in [["./CMakeLists.txt"][CMakeLists.txt]].
+The project uses CMAKE to generate build files, the configuration can be found in [[file:CMakeLists.txt][CMakeLists.txt]].
 * Engine
 ** Library
 There are 2 libraries used by the game:
