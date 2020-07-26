@@ -28,3 +28,4 @@ find_package(
 )
 
 target_link_libraries(game SDL2 SDL2_image)
+target_compile_options(game PRIVATE -Wall -Wextra)
