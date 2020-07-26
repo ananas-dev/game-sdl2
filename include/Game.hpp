@@ -23,6 +23,7 @@ class Game
                 bool Running() { return isRunning_; }
 
                 static SDL_Renderer *renderer;
+                static SDL_Event event;
 
         private:
                 bool isRunning_;

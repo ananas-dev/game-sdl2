@@ -18,6 +18,11 @@ class SpriteComponent : public Component
             SetTexture(path);
         }
 
+        ~SpriteComponent()
+        {
+            SDL_DestroyTexture(texture_);
+        }
+
         void SetTexture(const char *path)
         {
             texture_ = TextureManager::LoadTexture(path);
@@ -35,6 +40,8 @@ class SpriteComponent : public Component
         {
             destRect_.x = (int)transform_->position.x;
             destRect_.y = (int)transform_->position.y;
+            destRect_.w = transform_->height = transform_->scale;
+            destRect_.h = transform_->width = transform_->scale;
         }
 
         void Draw() override

@@ -1,4 +1,5 @@
 #include <Game.hpp>
+#include <Collision.hpp>
 #include <ECS/Components.hpp>
 #include <LogCmd.hpp>
 #include <Map.hpp>
@@ -9,8 +10,10 @@ Map* map;
 Manager manager;
 
 SDL_Renderer* Game::renderer = nullptr;
+SDL_Event Game::event;
 
-auto& player(manager.AddEntity());
+auto &player(manager.AddEntity());
+auto &wall(manager.AddEntity());
 
 Game::Game() {}
 Game::~Game() {}
@@ -49,9 +52,13 @@ void Game::Init(const char *title, int xpos, int ypos, int width, int height, bo
     /*  ECS implementation */
 
     player.AddComponent<TransformComponent>();
-    logcmd::info("Player position set !");
     player.AddComponent<SpriteComponent>("assets/adventurer/adventurer-idle-00.png");
-    logcmd::info("Player textures loaded !");
+    player.AddComponent<KeyboardController>();
+    player.AddComponent<ColliderComponent>("player");
+
+    wall.AddComponent<TransformComponent>(300.0f, 300.0f, 300, 20, 1);
+    wall.AddComponent<SpriteComponent>("assets/dongeon/wall_mid.png");
+    wall.AddComponent<ColliderComponent>("wall");
 }
 
 /* Frame related stuff */
@@ -91,7 +98,6 @@ void Game::EndFrame()
 
 void Game::HandleEvent()
 {
-    SDL_Event event;
     SDL_PollEvent(&event);
     switch (event.type)
     {
@@ -108,11 +114,6 @@ void Game::Update()
 {
     manager.Refresh();
     manager.Update();
-    player.GetComponent<TransformComponent>().position.Add(Vector2D(5, 5));
-    if (player.GetComponent<TransformComponent>().position.x > 100)
-    {
-        player.GetComponent<SpriteComponent>().SetTexture("assets/square.png");
-    }
 }
 
 void Game::Render()
