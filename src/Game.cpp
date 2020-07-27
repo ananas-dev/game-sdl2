@@ -6,6 +6,7 @@
 #include <Vector2D.hpp>
 #include <TextureManager.hpp>
 
+Map* map;
 Manager manager;
 
 SDL_Renderer* Game::renderer = nullptr;
@@ -16,107 +17,106 @@ std::vector<ColliderComponent*> Game::colliders;
 auto& player(manager.AddEntity());
 auto& wall(manager.AddEntity());
 
-auto& tile0(manager.AddEntity());
-auto& tile1(manager.AddEntity());
-auto& tile2(manager.AddEntity());
+enum groupLabels : std::size_t {
+    groupMap,
+    groupPlayers,
+    groupEnemies,
+    groupColliders
+};
+
+auto& tiles(manager.GetGroup(groupMap));
+auto& players(manager.GetGroup(groupPlayers));
+auto& enemies(manager.GetGroup(groupEnemies));
 
 Game::Game() {}
 Game::~Game() {}
 
-void Game::Init(const char *title, int xpos, int ypos, int width, int height, bool fullscreen)
-{
+void Game::Init(const char *title, int xpos, int ypos, int width, int height,
+                bool fullscreen) {
     int flags=0;
-    if (fullscreen)
-    {
+    if (fullscreen) {
         flags = SDL_WINDOW_FULLSCREEN;
     }
-    if (SDL_Init(SDL_INIT_EVERYTHING) == 0)
-    {
+    if (SDL_Init(SDL_INIT_EVERYTHING) == 0) {
         logcmd::info("Subsystems Initialized!");
-        window_ = SDL_CreateWindow(title, xpos, ypos, width, height, flags);
-        if (window_)
-        {
+        mWindow = SDL_CreateWindow(title, xpos, ypos, width, height, flags);
+        if (mWindow) {
             logcmd::info("Window Created!");
         }
 
-        renderer = SDL_CreateRenderer(window_, -1, 0);
-        if (renderer)
-        {
+        renderer = SDL_CreateRenderer(mWindow, -1, 0);
+
+        if (renderer) {
             SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
             logcmd::info("Renderer Created!");
         }
-
-        isRunning_ = true;
+        mIsRunning = true;
     } else {
-        isRunning_ = false;
+        mIsRunning = false;
     }
 
     //////////////////////////
     /// ECS implementation ///
     //////////////////////////
 
-    // Tiles
-    tile0.AddComponent<TileComponent>(200, 200, 32, 32, 0);
-    tile1.AddComponent<TileComponent>(250, 200, 32, 32, 1);
-    tile2.AddComponent<TileComponent>(150, 150, 32, 32, 2);
-    tile2.AddComponent<ColliderComponent>("wall");
+    // Map
+    Map::LoadMap("assets/test.txt", 4, 4);
 
     // Player
     player.AddComponent<TransformComponent>(2);
     player.AddComponent<SpriteComponent>("assets/adventurer/adventurer-idle-00.png");
     player.AddComponent<KeyboardController>();
     player.AddComponent<ColliderComponent>("player");
+    player.AddGroup(groupPlayers);
 
     // Wall
     wall.AddComponent<TransformComponent>(300.0f, 300.0f, 300, 20, 1);
     wall.AddComponent<SpriteComponent>("assets/dongeon/wall_mid.png");
     wall.AddComponent<ColliderComponent>("wall");
+    wall.AddGroup(groupMap);
 }
 
-///////////////////////////
-/// Frame related stuff ///
-///////////////////////////
+/////////////////////
+/// FRAME RELATED ///
+/////////////////////
 
-void Game::SetFps(const int FPS)
-{
-    frameDelay_ = 1000 / FPS;
+void Game::SetFps(const int FPS) {
+    mFrameDelay = 1000 / FPS;
 }
 
 // Runs at the start of the frame
-void Game::StartFrame()
-{
-    if (frameDelay_)
+void Game::StartFrame() {
+    if (mFrameDelay)
     {
-    frameStart_ = SDL_GetTicks();
+    mFrameStart = SDL_GetTicks();
     } else {
         logcmd::err("FPS is not set, set it with setFPS()");
-        isRunning_ = false;
+        mIsRunning = false;
     }
 }
 
 // Runs at the end of the frame
-void Game::EndFrame()
-{
-    if (frameStart_)
-    {
-        frameTime_ = SDL_GetTicks() - frameStart_;
-        if (frameDelay_ > frameTime_)
-        {
-            SDL_Delay(frameDelay_ - frameTime_);
+void Game::EndFrame() {
+    if (mFrameStart) {
+        mFrameTime = SDL_GetTicks() - mFrameStart;
+        if (mFrameDelay > mFrameTime) {
+            SDL_Delay(mFrameDelay - mFrameTime);
         }
     } else {
         logcmd::err("The frame is not initialized, use start()");
-        isRunning_ = false;
+        mIsRunning = false;
     }
 }
 
-void Game::HandleEvent()
-{
+////////////////////////
+/// RUNS EVERY FRAME ///
+////////////////////////
+
+void Game::HandleEvent() {
     SDL_PollEvent(&event);
-    switch (event.type)
-    {
+    switch (event.type) {
         case SDL_QUIT:
-            isRunning_ = false;
+            mIsRunning = false;
             break;
 
         default:
@@ -124,27 +124,48 @@ void Game::HandleEvent()
     }
 }
 
-void Game::Update()
-{
+void Game::Update() {
     manager.Refresh();
     manager.Update();
 
-    for (auto cc : colliders)
-    {
-        Collision::AABB(player.GetComponent<ColliderComponent>(), *cc);
+    for (auto collider: colliders) {
+        Collision::AABB(player.GetComponent<ColliderComponent>(), *collider);
     }
 }
 
-void Game::Render()
-{
+void Game::Render() {
     SDL_RenderClear(renderer);
-    manager.Draw();
+    // Begin
+    for (auto& tile : tiles) {
+        tile->Draw();
+    }
+    for (auto& player : players) {
+        player->Draw();
+    }
+    for (auto& enemy : enemies) {
+        enemy->Draw();
+    }
+    // End
     SDL_RenderPresent(renderer);
 }
 
-void Game::Clean()
-{
-    SDL_DestroyWindow(window_);
+void Game::Clean() {
+    SDL_DestroyWindow(mWindow);
     SDL_DestroyRenderer(renderer);
     SDL_Quit();
 }
+
+bool Game::Running() {
+    return mIsRunning;
+}
+
+/////////////
+/// TILES ///
+/////////////
+
+void Game::AddTile(int x, int y, int id) {
+    auto& tile(manager.AddEntity());
+    tile.AddComponent<TileComponent>(x, y, 32, 32, id);
+    tile.AddGroup(groupMap);
+}
+

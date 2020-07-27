@@ -1,16 +1,14 @@
 #include <GameObject.hpp>
 #include <TextureManager.hpp>
 
-GameObject::GameObject(const char* texturesheet, int xpos, int ypos)
-{
+GameObject::GameObject(const char* texturesheet, int xpos, int ypos) {
     objTexture_ = TextureManager::LoadTexture(texturesheet);
 
     xpos_ = xpos;
     ypos_ = ypos;
 }
 
-void GameObject::Update()
-{
+void GameObject::Update() {
     xpos_++;
     ypos_++;
 
@@ -26,7 +24,6 @@ void GameObject::Update()
 
 }
 
-void GameObject::Render()
-{
+void GameObject::Render() {
     SDL_RenderCopy(Game::renderer, objTexture_, &srcRect_, &destRect_);
 }

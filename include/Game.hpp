@@ -7,9 +7,8 @@
 
 class ColliderComponent;
 
-class Game
-{
-    public:
+class Game {
+public:
         Game();
         ~Game();
 
@@ -24,17 +23,18 @@ class Game
         void Update();
         void Render();
         void Clean();
-        bool Running() { return isRunning_; }
+        bool Running();
 
+        static void AddTile(int x, int y, int id);
         static SDL_Renderer *renderer;
         static SDL_Event event;
         static std::vector<ColliderComponent*> colliders;
 
-    private:
-        bool isRunning_;
-        SDL_Window *window_;
-        int frameDelay_;
-        int frameTime_;
-        Uint32 frameStart_;
-        int frameCount_;
+private:
+        bool mIsRunning;
+        SDL_Window *mWindow;
+        int mFrameDelay;
+        int mFrameTime;
+        Uint32 mFrameStart;
+        int mFrameCount;
 };

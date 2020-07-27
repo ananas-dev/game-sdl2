@@ -5,48 +5,42 @@
 #include <SDL2/SDL.h>
 
 
-class SpriteComponent : public Component
-{
-    private:
-        TransformComponent *transform_;
-        SDL_Texture *texture_;
-        SDL_Rect srcRect_, destRect_;
+class SpriteComponent : public Component {
+private:
+    TransformComponent *mTransform;
+    SDL_Texture *mTexture;
+    SDL_Rect mSrcRect, mDestRect;
 
-    public:
-        SpriteComponent() = default;
-        SpriteComponent(std::string path)
-        {
-            SetTexture(path);
-        }
+public:
+    SpriteComponent() = default;
 
-        ~SpriteComponent()
-        {
-            SDL_DestroyTexture(texture_);
-        }
+    SpriteComponent(std::string path) {
+        SetTexture(path);
+    }
 
-        void SetTexture(std::string path)
-        {
-            texture_ = TextureManager::LoadTexture(path);
-        }
+    ~SpriteComponent() {
+        SDL_DestroyTexture(mTexture);
+    }
 
-        void Init() override
-        {
-            transform_ = &entity->GetComponent<TransformComponent>();
-            srcRect_.x = srcRect_.y = 0;
-            srcRect_.w = srcRect_.h = 32;
-            destRect_.w = destRect_.h = 64;
-        }
+    void SetTexture(std::string path) {
+        mTexture = TextureManager::LoadTexture(path);
+    }
 
-        void Update() override
-        {
-            destRect_.x = static_cast<int>(transform_->position.x);
-            destRect_.y = static_cast<int>(transform_->position.y);
-            destRect_.w = transform_->width * transform_->scale;
-            destRect_.h = transform_->height * transform_->scale;
-        }
+    void Init() override {
+        mTransform = &entity->GetComponent<TransformComponent>();
+        mSrcRect.x = mSrcRect.y = 0;
+        mSrcRect.w = mSrcRect.h = 32;
+        mDestRect.w = mDestRect.h = 64;
+    }
 
-        void Draw() override
-        {
-            TextureManager::Draw(texture_, srcRect_, destRect_);
-        }
+    void Update() override {
+        mDestRect.x = static_cast<int>(mTransform->position.x);
+        mDestRect.y = static_cast<int>(mTransform->position.y);
+        mDestRect.w = mTransform->width * mTransform->scale;
+        mDestRect.h = mTransform->height * mTransform->scale;
+    }
+
+    void Draw() override {
+        TextureManager::Draw(mTexture, mSrcRect, mDestRect);
+    }
 };

@@ -9,117 +9,173 @@
 
 class Component;
 class Entity;
+class Manager;
 
 using ComponentId = std::size_t;
+using Group = std::size_t;
 
-inline ComponentId GetComponentTypeId()
-{
+constexpr std::size_t maxComponents = 32;
+constexpr std::size_t maxGroups = 32;
+
+inline ComponentId GetNewComponentTypeId() {
     static ComponentId lastId = 0;
     return lastId++;
 }
 
-template <typename T> inline ComponentId GetComponentTypeId() noexcept
-{
-    static ComponentId typeId = GetComponentTypeId();
+template <typename T>
+inline ComponentId GetComponentTypeId() noexcept {
+    static ComponentId typeId = GetNewComponentTypeId();
     return typeId;
 }
 
-constexpr std::size_t maxComponents = 32;
+using ComponentBitset = std::bitset<maxComponents>;
+using GroupBitset = std::bitset<maxGroups>;
 
-using ComponentBitSet = std::bitset<maxComponents>;
 using ComponentArray = std::array<Component*, maxComponents>;
 
-class Component
-{
-    public:
-        Entity* entity;
+class Component {
+public:
+    Entity* entity;
 
-        virtual void Init() {}
-        virtual void Update() {}
-        virtual void Draw() {}
+    virtual void Init() {}
+    virtual void Update() {}
+    virtual void Draw() {}
 
-        virtual ~Component() {}
+    virtual ~Component() {}
 };
 
-class Entity
-{
-    private:
-        bool active_ = true;
-        std::vector<std::unique_ptr<Component>> components_;
+//////////////
+/// ENTITY ///
+//////////////
 
-        ComponentArray componentArray_;
-        ComponentBitSet componentBitset_;
+class Entity {
+private:
+    Manager& manager;
+    bool mActive = true;
+    std::vector<std::unique_ptr<Component>> mComponents;
 
-    public:
-        void Update()
-        {
-            for (auto& c : components_) c->Update();
+    ComponentArray mComponentArray;
+    ComponentBitset mComponentBitset;
+    GroupBitset mGroupBitset;
+
+public:
+    Entity(Manager& mManager) : manager(mManager) {}
+
+    void Update() {
+        for (auto& component : mComponents) {
+            component->Update();
         }
-        void Draw()
-        {
-            for (auto& c : components_) c->Draw();
+    }
+
+    void Draw() {
+        for (auto& component : mComponents) {
+            component->Draw();
         }
-        bool IsActive() { return active_; }
-        void Destroy() { active_ = false; }
+    }
 
-        template <typename T>
-        bool HasComponent() const
-        {
-            return componentBitset_[GetComponentTypeId<T>()];
-        }
+    bool IsActive() {
+        return mActive;
+    }
 
-        template <typename T, typename... Targs>
-        T& AddComponent(Targs&&... mArgs)
-        {
-            T* c(new T(std::forward<Targs>(mArgs)...));
-            c->entity = this;
-            std::unique_ptr<Component> uPtr{c};
-            components_.emplace_back(std::move(uPtr));
+    void Destroy() {
+        mActive = false;
+    }
 
-            componentArray_[GetComponentTypeId<T>()] = c;
-            componentBitset_[GetComponentTypeId<T>()] = true;
+    bool HasGroup(Group group) {
+        return mGroupBitset[group];
+    }
 
-            c->Init();
-            return *c;
+    void AddGroup(Group group);
 
-        }
+    void DelGroup(Group group) {
+        mGroupBitset[group] = false;
+    }
 
-        template <typename T>
-        T& GetComponent() const
-        {
-            auto ptr(componentArray_[GetComponentTypeId<T>()]);
-            return *static_cast<T*>(ptr);
-        }
+    template <typename T>
+    bool HasComponent() const {
+        return mComponentBitset[GetComponentTypeId<T>()];
+    }
+
+    template <typename T, typename... Targs>
+    T& AddComponent(Targs&&... mArgs) {
+
+        T* c(new T(std::forward<Targs>(mArgs)...));
+        c->entity = this;
+        std::unique_ptr<Component> uPtr{c};
+        mComponents.emplace_back(std::move(uPtr));
+
+        mComponentArray[GetComponentTypeId<T>()] = c;
+        mComponentBitset[GetComponentTypeId<T>()] = true;
+
+        c->Init();
+        return *c;
+    }
+
+    template <typename T>
+    T& GetComponent() const {
+        auto ptr(mComponentArray[GetComponentTypeId<T>()]);
+        return *static_cast<T*>(ptr);
+    };
 };
 
-class Manager
-{
-    private:
-        std::vector<std::unique_ptr<Entity>> entities_;
+///////////////
+/// MANAGER ///
+///////////////
 
-    public:
-        void Update()
-        {
-            for (auto& e : entities_ ) e->Update();
+class Manager {
+private:
+    std::vector<std::unique_ptr<Entity>> mEntities;
+    std::array<std::vector<Entity*>, maxGroups> mGroupedEntities;
+
+public:
+    void Update() {
+        for (auto& entities : mEntities) {
+            entities->Update();
         }
-        void Draw()
-        {
-            for (auto& e : entities_ ) e->Draw();
+    }
+
+    void Draw() {
+        for (auto& entities : mEntities) {
+            entities->Draw();
         }
-        void Refresh()
+    }
+
+    void Refresh()
         {
-            entities_.erase(std::remove_if(std::begin(entities_), std::end(entities_),
-                                           [](const std::unique_ptr<Entity> &mEntity)
-                                           {
-                                               return !mEntity->IsActive();
-                                           }),
-                            std::end(entities_));
+            for (auto i(0u); i < maxGroups; i++) {
+                auto v(mGroupedEntities[i]);
+                v.erase(
+                    std::remove_if(
+                        std::begin(v), std::end(v),
+                        [i](Entity* entity) {
+                            return entity->IsActive() || entity->HasGroup(i);
+                        }),
+                    std::end(v)
+                    );
+            }
+
+            mEntities.erase(
+                std::remove_if(
+                    std::begin(mEntities), std::end(mEntities),
+                    [](const std::unique_ptr<Entity> &mEntity) {
+                        return !mEntity->IsActive();
+                    }),
+                std::end(mEntities)
+                );
         }
-        Entity& AddEntity()
-        {
-            Entity* e = new Entity();
-            std::unique_ptr<Entity> uPtr{e};
-            entities_.emplace_back(std::move(uPtr));
-            return *e;
-        }
+
+    void AddToGroup(Entity* entity, Group group) {
+        mGroupedEntities[group].emplace_back(entity);
+    }
+
+    std::vector<Entity*>& GetGroup(Group group) {
+        return mGroupedEntities[group];
+    }
+
+    Entity& AddEntity() {
+        Entity* entity = new Entity(*this);
+        std::unique_ptr<Entity> uPtr{ entity };
+        mEntities.emplace_back(std::move(uPtr));
+        return *entity;
+    }
 };

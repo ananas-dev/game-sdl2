@@ -10,13 +10,15 @@ file(COPY "${PROJECT_SOURCE_DIR}/assets" DESTINATION "${EXECUTABLE_OUTPUT_PATH}"
 
 include_directories(
   ${PROJECT_SOURCE_DIR}/include
-  ${PROJECT_SOURCE_DIR}/src
+  ${PROJECT_SOURCE_DIR}/src/ECS/*
+  ${PROJECT_SOURCE_DIR}/src/*
 )
 
 file(
   GLOB SRCS
   "${PROJECT_SOURCE_DIR}/include/*"
   "${PROJECT_SOURCE_DIR}/src/*"
+  "${PROJECT_SOURCE_DIR}/src/ECS/*"
   "${PROJECT_SOURCE_DIR}/game/*"
 )
 
