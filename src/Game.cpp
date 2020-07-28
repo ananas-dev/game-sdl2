@@ -86,9 +86,8 @@ void Game::SetFps(const int FPS) {
 
 // Runs at the start of the frame
 void Game::StartFrame() {
-    if (mFrameDelay)
-    {
-    mFrameStart = SDL_GetTicks();
+    if (mFrameDelay) {
+         mFrameStart = SDL_GetTicks();
     } else {
         logcmd::err("FPS is not set, set it with setFPS()");
         mIsRunning = false;
