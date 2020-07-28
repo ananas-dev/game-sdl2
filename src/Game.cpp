@@ -15,7 +15,7 @@ SDL_Event Game::event;
 std::vector<ColliderComponent*> Game::colliders;
 
 auto& player(manager.AddEntity());
-auto& wall(manager.AddEntity());
+//auto& wall(manager.AddEntity());
 
 enum groupLabels : std::size_t {
     groupMap,
@@ -56,7 +56,7 @@ void Game::Init(const char *title, int xpos, int ypos, int width, int height,
     }
 
     //////////////////////////
-    /// ECS implementation ///
+    /// ECS IMPLEMENTATION ///
     //////////////////////////
 
     // Map
