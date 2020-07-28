@@ -60,7 +60,7 @@ void Game::Init(const char *title, int xpos, int ypos, int width, int height,
     //////////////////////////
 
     // Map
-    Map::LoadMap("assets/test.txt", 4, 4);
+    Map::LoadMap("assets/maps/map.txt", 25, 20);
 
     // Player
     player.AddComponent<TransformComponent>(2);
@@ -70,10 +70,10 @@ void Game::Init(const char *title, int xpos, int ypos, int width, int height,
     player.AddGroup(groupPlayers);
 
     // Wall
-    wall.AddComponent<TransformComponent>(300.0f, 300.0f, 300, 20, 1);
-    wall.AddComponent<SpriteComponent>("assets/dongeon/wall_mid.png");
-    wall.AddComponent<ColliderComponent>("wall");
-    wall.AddGroup(groupMap);
+    //wall.AddComponent<TransformComponent>(300.0f, 300.0f, 300, 20, 1);
+    //wall.AddComponent<SpriteComponent>("assets/dongeon/wall_mid.png");
+    //wall.AddComponent<ColliderComponent>("wall");
+    //wall.AddGroup(groupMap);
 }
 
 /////////////////////
