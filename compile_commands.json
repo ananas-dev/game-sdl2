@@ -1,0 +1,47 @@
+[
+{
+  "directory": "/home/lucien/Projects/game-sdl2/build",
+  "command": "/usr/bin/c++  -I/home/lucien/Projects/game-sdl2/include -Wall -Wextra -o CMakeFiles/game.dir/game/main.cpp.o -c /home/lucien/Projects/game-sdl2/game/main.cpp",
+  "file": "/home/lucien/Projects/game-sdl2/game/main.cpp"
+},
+{
+  "directory": "/home/lucien/Projects/game-sdl2/build",
+  "command": "/usr/bin/c++  -I/home/lucien/Projects/game-sdl2/include -Wall -Wextra -o CMakeFiles/game.dir/src/Collision.cpp.o -c /home/lucien/Projects/game-sdl2/src/Collision.cpp",
+  "file": "/home/lucien/Projects/game-sdl2/src/Collision.cpp"
+},
+{
+  "directory": "/home/lucien/Projects/game-sdl2/build",
+  "command": "/usr/bin/c++  -I/home/lucien/Projects/game-sdl2/include -Wall -Wextra -o CMakeFiles/game.dir/src/ECS/ECS.cpp.o -c /home/lucien/Projects/game-sdl2/src/ECS/ECS.cpp",
+  "file": "/home/lucien/Projects/game-sdl2/src/ECS/ECS.cpp"
+},
+{
+  "directory": "/home/lucien/Projects/game-sdl2/build",
+  "command": "/usr/bin/c++  -I/home/lucien/Projects/game-sdl2/include -Wall -Wextra -o CMakeFiles/game.dir/src/Game.cpp.o -c /home/lucien/Projects/game-sdl2/src/Game.cpp",
+  "file": "/home/lucien/Projects/game-sdl2/src/Game.cpp"
+},
+{
+  "directory": "/home/lucien/Projects/game-sdl2/build",
+  "command": "/usr/bin/c++  -I/home/lucien/Projects/game-sdl2/include -Wall -Wextra -o CMakeFiles/game.dir/src/GameObject.cpp.o -c /home/lucien/Projects/game-sdl2/src/GameObject.cpp",
+  "file": "/home/lucien/Projects/game-sdl2/src/GameObject.cpp"
+},
+{
+  "directory": "/home/lucien/Projects/game-sdl2/build",
+  "command": "/usr/bin/c++  -I/home/lucien/Projects/game-sdl2/include -Wall -Wextra -o CMakeFiles/game.dir/src/LogCmd.cpp.o -c /home/lucien/Projects/game-sdl2/src/LogCmd.cpp",
+  "file": "/home/lucien/Projects/game-sdl2/src/LogCmd.cpp"
+},
+{
+  "directory": "/home/lucien/Projects/game-sdl2/build",
+  "command": "/usr/bin/c++  -I/home/lucien/Projects/game-sdl2/include -Wall -Wextra -o CMakeFiles/game.dir/src/Map.cpp.o -c /home/lucien/Projects/game-sdl2/src/Map.cpp",
+  "file": "/home/lucien/Projects/game-sdl2/src/Map.cpp"
+},
+{
+  "directory": "/home/lucien/Projects/game-sdl2/build",
+  "command": "/usr/bin/c++  -I/home/lucien/Projects/game-sdl2/include -Wall -Wextra -o CMakeFiles/game.dir/src/TextureManager.cpp.o -c /home/lucien/Projects/game-sdl2/src/TextureManager.cpp",
+  "file": "/home/lucien/Projects/game-sdl2/src/TextureManager.cpp"
+},
+{
+  "directory": "/home/lucien/Projects/game-sdl2/build",
+  "command": "/usr/bin/c++  -I/home/lucien/Projects/game-sdl2/include -Wall -Wextra -o CMakeFiles/game.dir/src/Vector2D.cpp.o -c /home/lucien/Projects/game-sdl2/src/Vector2D.cpp",
+  "file": "/home/lucien/Projects/game-sdl2/src/Vector2D.cpp"
+}
+]
